@@ -153,6 +153,16 @@ void Bracket::report()
          " квадратных скобок"<<std::endl;
       if(curlyOpen.stackSize()!=0)
          out<<"не закрыто "<<curlyOpen.stackSize()<<" фигурных скобок"<<std::endl;
+      if(roundClose.stackSize()!=0)
+         out<<"не открыто "<<roundClose.stackSize()<<" круглых скобок"<<std::endl;
+      if(triangularClose.stackSize()!=0)
+         out<<"не отрыто "<<triangularClose.stackSize()<<
+         " треугольных скобок"<<std::endl;
+      if(squareClose.stackSize()!=0)
+         out<<"не открыто "<<squareClose.stackSize()<<
+         " квадратных скобок"<<std::endl;
+      if(curlyClose.stackSize()!=0)
+         out<<"не открыто "<<curlyClose.stackSize()<<" фигурных скобок"<<std::endl;
          
 }
 
