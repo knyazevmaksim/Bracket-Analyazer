@@ -1,0 +1,6 @@
+*.cmake
+*.exe
+*.out
+*.app
+/gtest
+/CMakeFiles

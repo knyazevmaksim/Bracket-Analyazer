@@ -1,25 +1,25 @@
 #include "task2.h"
 void Bracket::roundBracketStat(int& open, int& close)
 {
-   open=roundOpen.stackSize();
-   close=roundClose.stackSize();
+   open=roundOpenCount;
+   close=roundCloseCount;
 }
 void Bracket::triangularBracketStat(int& open, int& close)
 {
-   open=triangularOpen.stackSize();
-   close=triangularClose.stackSize();
+   open=triangularOpenCount;
+   close=triangularCloseCount;
 }
 
 void Bracket::squareBracketStat(int& open, int& close)
 {
-   open=squareOpen.stackSize();
-   close=squareClose.stackSize();
+   open=squareOpenCount;
+   close=squareCloseCount;
 }
 
 void Bracket::curlyBracketStat(int& open, int& close)
 {
-   open=curlyOpen.stackSize();
-   close=curlyClose.stackSize();
+   open=curlyOpenCount;
+   close=curlyCloseCount;
 }
 
 void Bracket::putText(char * buffer, int length)
@@ -27,7 +27,7 @@ void Bracket::putText(char * buffer, int length)
    
    char tmp;
    int i;
-   for(int i=0;i<length; i++)
+   for(int i=length;i>=0; i--)
    {
       tmp=buffer[i];
       text.push(tmp);
@@ -45,41 +45,62 @@ void Bracket::bracketCheck()
          case '(':
          {
             roundOpen.push(true);
+            roundOpenCount++;
             break;
          }
          case ')':
          {
-            roundClose.push(true);
+            roundCloseCount++;
+            if(roundOpen.empty())
+               roundClose.push(false);
+            else
+                roundOpen.pop();
+            
             break;
          }
          case '<':
          {
             triangularOpen.push(true);
+            triangularOpenCount++;
             break;
          }
          case '>':
          {
-            triangularClose.push(true);
+            triangularCloseCount++;
+            if(triangularOpen.empty())
+               triangularClose.push(false);
+            else
+                triangularOpen.pop();
             break;
          }
           case '[':
          {
             squareOpen.push(true);
+            squareOpenCount++;
             break;
          }
          case ']':
          {
-            squareClose.push(true);
+            squareCloseCount++;
+            if(squareOpen.empty())
+               squareClose.push(false);
+            else
+                squareOpen.pop();
             break;
          }
           case '{':
          {
-           curlyOpen.push(true);
+            curlyOpen.push(true);
+            curlyOpenCount++;
             break;
          }
          case '}':
          {
-            curlyClose.push(true);
+            curlyCloseCount++;
+            if(curlyOpen.empty())
+               curlyClose.push(false);
+            else
+               curlyOpen.pop();
             break;
          }
       }
@@ -88,10 +109,13 @@ void Bracket::bracketCheck()
 }
 bool Bracket::isAllBracketsClose()
 {
-   if ((roundOpen.stackSize()==roundClose.stackSize())&&
-   (triangularOpen.stackSize()==triangularClose.stackSize())&&
-   (squareOpen.stackSize()==squareClose.stackSize())&&
-   (curlyOpen.stackSize()==curlyClose.stackSize()))
+   if ((roundOpen.stackSize()==0)&&
+   (triangularOpen.stackSize()==0)&&
+   (squareOpen.stackSize()==0)&&
+   (curlyOpen.stackSize()==0)&&(roundClose.stackSize()==0)&&
+   (triangularClose.stackSize()==0)&&
+   (squareClose.stackSize()==0)&&
+   (curlyClose.stackSize()==0))
       return true;
    else
       return false;
@@ -103,5 +127,34 @@ Bracket::~Bracket()
 }
 Bracket::Bracket()
 {
-   
+   roundOpenCount=0;
+   roundCloseCount=0;
+   triangularOpenCount=0;
+   triangularCloseCount=0;
+   squareOpenCount=0;
+   squareCloseCount=0;
+   curlyOpenCount=0;
+   curlyCloseCount=0;
 }
+
+void Bracket::report()
+{
+   std::fstream out("report.txt", std::ios_base::app);
+   if (isAllBracketsClose())
+      out<<"Все скобки закрыты"<<std::endl;
+   else
+      if(roundOpen.stackSize()!=0)
+         out<<"не закрыто "<<roundOpen.stackSize()<<" круглых скобок"<<std::endl;
+      if(triangularOpen.stackSize()!=0)
+         out<<"не закрыто "<<triangularOpen.stackSize()<<
+         " треугольных скобок"<<std::endl;
+      if(squareOpen.stackSize()!=0)
+         out<<"не закрыто "<<squareOpen.stackSize()<<
+         " квадратных скобок"<<std::endl;
+      if(curlyOpen.stackSize()!=0)
+         out<<"не закрыто "<<curlyOpen.stackSize()<<" фигурных скобок"<<std::endl;
+         
+}
+
+
+

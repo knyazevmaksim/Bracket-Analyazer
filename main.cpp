@@ -16,6 +16,8 @@ int main()
    in.read(buffer,length);
    in.close();
    B.putText(buffer, length);
+   B.bracketCheck();
+   B.report();
    
    
    
