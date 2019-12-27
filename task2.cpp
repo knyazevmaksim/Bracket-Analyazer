@@ -1,124 +1,14 @@
 #include "task2.h"
-void Bracket::roundBracketStat(int& open, int& close)
-{
-   open=roundOpenCount;
-   close=roundCloseCount;
-}
-void Bracket::triangularBracketStat(int& open, int& close)
-{
-   open=triangularOpenCount;
-   close=triangularCloseCount;
-}
 
-void Bracket::squareBracketStat(int& open, int& close)
+void Bracket::putText(char * buffer, int j)
 {
-   open=squareOpenCount;
-   close=squareCloseCount;
-}
-
-void Bracket::curlyBracketStat(int& open, int& close)
-{
-   open=curlyOpenCount;
-   close=curlyCloseCount;
-}
-
-void Bracket::putText(char * buffer, int length)
-{
-   
-   char tmp;
    int i;
-   for(int i=length;i>=0; i--)
+   length=j;
+   text = new char [length];
+   for(int i=0;i<length; i++)
    {
-      tmp=buffer[i];
-      text.push(tmp);
+      text[i]=buffer[i];
    }
-}
-
-void Bracket::bracketCheck()
-{
-   char tmp;
-   while(!text.empty())
-   {
-      tmp=text.top();
-      switch(tmp)
-      {
-         case '(':
-         {
-            roundOpen.push(true);
-            roundOpenCount++;
-            break;
-         }
-         case ')':
-         {
-            roundCloseCount++;
-            if(roundOpen.empty())
-               roundClose.push(false);
-            else
-                roundOpen.pop();
-            
-            break;
-         }
-         case '<':
-         {
-            triangularOpen.push(true);
-            triangularOpenCount++;
-            break;
-         }
-         case '>':
-         {
-            triangularCloseCount++;
-            if(triangularOpen.empty())
-               triangularClose.push(false);
-            else
-                triangularOpen.pop();
-            break;
-         }
-          case '[':
-         {
-            squareOpen.push(true);
-            squareOpenCount++;
-            break;
-         }
-         case ']':
-         {
-            squareCloseCount++;
-            if(squareOpen.empty())
-               squareClose.push(false);
-            else
-                squareOpen.pop();
-            break;
-         }
-          case '{':
-         {
-            curlyOpen.push(true);
-            curlyOpenCount++;
-            break;
-         }
-         case '}':
-         {
-            curlyCloseCount++;
-            if(curlyOpen.empty())
-               curlyClose.push(false);
-            else
-               curlyOpen.pop();
-            break;
-         }
-      }
-      text.pop();
-   }
-}
-bool Bracket::isAllBracketsClose()
-{
-   if ((roundOpen.stackSize()==0)&&
-   (triangularOpen.stackSize()==0)&&
-   (squareOpen.stackSize()==0)&&
-   (curlyOpen.stackSize()==0)&&(roundClose.stackSize()==0)&&
-   (triangularClose.stackSize()==0)&&
-   (squareClose.stackSize()==0)&&
-   (curlyClose.stackSize()==0))
-      return true;
-   else
-      return false;
 }
 
 Bracket::~Bracket()
@@ -127,43 +17,105 @@ Bracket::~Bracket()
 }
 Bracket::Bracket()
 {
-   roundOpenCount=0;
-   roundCloseCount=0;
-   triangularOpenCount=0;
-   triangularCloseCount=0;
-   squareOpenCount=0;
-   squareCloseCount=0;
-   curlyOpenCount=0;
-   curlyCloseCount=0;
+   length=0;
+   text=NULL;
+   analyzers=new Analyzer [4];
+   analyzers[0]=Analyzer(ROUND);
+   analyzers[1]=Analyzer(TRIANGULAR);
+   analyzers[2]=Analyzer(SQUARE);
+   analyzers[3]=Analyzer(CURLY);
 }
 
 void Bracket::report()
 {
    std::fstream out("report.txt", std::ios_base::app);
-   if (isAllBracketsClose())
-      out<<"Все скобки закрыты"<<std::endl;
+   int openCount=0;
+   int closeCount=0;
+   int openSize=0;
+   int closeSize=0;
+   bool tmp;
+   std::string name;
+   for (int i=0; i<4; i++)
+   {
+      analyzers[i].copyText(text,length);
+      analyzers[i].analyze();
+      analyzers[i].stat(openCount, closeCount, openSize, closeSize);
+      tmp=analyzers[i].isAllBracketsClose();
+      if (i==0)
+         name="круглые";
+      if (i==1)
+         name="треугольные";
+      if (i==2)
+         name="квадратные";
+      if (i==3)
+         name="фигурные";
+      if(tmp)
+         out<<"все "<<name<<" скобки закрыты"<<std::endl;
+      else
+      {
+         out<<"не закрыто "<<name<<" скобок "<<openSize<<std::endl;
+         out<<"не открыто "<<name<<" скобок "<<closeSize<<std::endl;
+      }
+      out<<"открытых "<<name<<" скобок "<<openCount<<std::endl;
+      out<<"закрытых "<<name<<" скобок "<<closeCount<<std::endl;
+   }
+   /*analyzers[0].copyText(text,length);
+   analyzers[0].analyze();
+   analyzers[0].stat(openCount, closeCount, openSize, closeSize);
+   tmp=analyzers[0].isAllBracketsClose();
+   if(tmp)
+      out<<"все круглые скобки закрыты"<<std::endl;
    else
-      if(roundOpen.stackSize()!=0)
-         out<<"не закрыто "<<roundOpen.stackSize()<<" круглых скобок"<<std::endl;
-      if(triangularOpen.stackSize()!=0)
-         out<<"не закрыто "<<triangularOpen.stackSize()<<
-         " треугольных скобок"<<std::endl;
-      if(squareOpen.stackSize()!=0)
-         out<<"не закрыто "<<squareOpen.stackSize()<<
-         " квадратных скобок"<<std::endl;
-      if(curlyOpen.stackSize()!=0)
-         out<<"не закрыто "<<curlyOpen.stackSize()<<" фигурных скобок"<<std::endl;
-      if(roundClose.stackSize()!=0)
-         out<<"не открыто "<<roundClose.stackSize()<<" круглых скобок"<<std::endl;
-      if(triangularClose.stackSize()!=0)
-         out<<"не отрыто "<<triangularClose.stackSize()<<
-         " треугольных скобок"<<std::endl;
-      if(squareClose.stackSize()!=0)
-         out<<"не открыто "<<squareClose.stackSize()<<
-         " квадратных скобок"<<std::endl;
-      if(curlyClose.stackSize()!=0)
-         out<<"не открыто "<<curlyClose.stackSize()<<" фигурных скобок"<<std::endl;
-         
+      {
+         out<<"не закрыто круглых скобок "<<openSize<<std::endl;
+         out<<"не открыто круглых скобок "<<openSize<<std::endl;
+      }
+   out<<"открытых круглых скобок "<<openCount<<std::endl;
+   out<<"закрытых круглых скобок "<<closeCount<<std::endl;
+   
+   analyzers[1].copyText(text,length);
+   analyzers[1].analyze();
+   analyzers[1].stat(openCount, closeCount, openSize, closeSize);
+   tmp=analyzers[1].isAllBracketsClose();
+   if(tmp)
+      out<<"все треугольные скобки закрыты"<<std::endl;
+   else
+      {
+         out<<"не закрыто треугольных скобок "<<openSize<<std::endl;
+         out<<"не открыто треугольных скобок "<<openSize<<std::endl;
+      }
+   out<<"открытых треугольных скобок "<<openCount<<std::endl;
+   out<<"закрытых треугольных скобок "<<closeCount<<std::endl;
+   
+   analyzers[2].copyText(text,length);
+   analyzers[2].analyze();
+   analyzers[2].stat(openCount, closeCount, openSize, closeSize);
+   tmp=analyzers[2].isAllBracketsClose();
+   if(tmp)
+      out<<"все квадратные скобки закрыты"<<std::endl;
+   else
+      {
+         out<<"не закрыто квадратных скобок "<<openSize<<std::endl;
+         out<<"не открыто квадратных скобок "<<openSize<<std::endl;
+      }
+   out<<"открытых квадратных скобок "<<openCount<<std::endl;
+   out<<"закрытых квадратных скобок "<<closeCount<<std::endl;
+   
+   analyzers[3].copyText(text,length);
+   analyzers[3].analyze();
+   analyzers[3].stat(openCount, closeCount, openSize, closeSize);
+   tmp=analyzers[3].isAllBracketsClose();
+   if(tmp)
+      out<<"все фигурные скобки закрыты"<<std::endl;
+   else
+      {
+         out<<"не закрыто фигурных скобок "<<openSize<<std::endl;
+         out<<"не открыто фигурных скобок "<<openSize<<std::endl;
+      }
+   out<<"открытых фигурных скобок "<<openCount<<std::endl;
+   out<<"закрытых фигурных скобок "<<closeCount<<std::endl;*/
+      
+   
 }
 
 
