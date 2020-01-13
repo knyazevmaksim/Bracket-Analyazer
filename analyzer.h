@@ -10,7 +10,7 @@ enum BracketType
    CURLY
 };
 
-class Analyzer
+/*class Analyzer
 {
    public:
       Analyzer();
@@ -28,5 +28,18 @@ class Analyzer
       Stack<bool> open, close;
       
    
+};*/
+
+class Analyzer
+{
+   public:
+      virtual void copyText(char* , int )=0;
+      void stat(int & , int &, int &, int & );
+      virtual void analyze()=0;
+      bool isAllBracketsClose();
+   protected:
+      Stack<char> text;
+      int openCount, closeCount;
+      Stack<bool> open, close; 
 };
 #endif

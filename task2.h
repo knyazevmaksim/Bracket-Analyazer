@@ -4,6 +4,7 @@
 #include "analyzer.h"
 #include <fstream>
 #include <string>
+#include <vector>
 
 class Bracket
 {
@@ -11,10 +12,12 @@ class Bracket
       Bracket();
       ~Bracket();
       void putText(char*, int );
-      void report();
+      void report(std::string);
+      void addBrackets(Analyzer* , BracketType );
       
    private:
-      Analyzer* analyzers;
+      std::vector<Analyzer*> analyzers;
+      std::vector<BracketType> bracketType;
       char* text;
       int length;
 };

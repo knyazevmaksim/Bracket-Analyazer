@@ -1,4 +1,5 @@
 #include "task2.h"
+#include "builder.h"
 #include <fstream>
 #include <iostream>
 
@@ -6,6 +7,8 @@
 int main()
 {
    Bracket B;
+   Bracket C;
+   BracketAnalyzerBuilder A;
    std::fstream in("source.txt", std::ios_base::in);
    int length;
    char * buffer;
@@ -15,8 +18,13 @@ int main()
    buffer=new char [length];
    in.read(buffer,length);
    in.close();
+   B=A.addRoundBrackets().addSquareBrackets().addTriangularBrackets().addCurlyBrackets().getResult();
+   //A.reset();
+   //C=A.addTriangularBrackets().addCurlyBrackets().getResult();
+   //C.putText(buffer, length);
+   //C.report("reportC.txt");
    B.putText(buffer, length);
-   B.report();
+   B.report("reportB.txt");
   
    return 0;
 }

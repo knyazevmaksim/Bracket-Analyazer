@@ -1,10 +1,5 @@
 #include "analyzer.h"
-
-Analyzer::Analyzer()
-{
-   
-}
-
+/*
 Analyzer::Analyzer(BracketType i)
 {
    openCount=0;
@@ -31,7 +26,7 @@ Analyzer::Analyzer(BracketType i)
       bracketType [1]='}';
    }
 }
-
+*/
 void Analyzer::stat(int & i, int & j, int & sizeOpen,int & sizeClose)
 {
    i=openCount;
@@ -39,7 +34,7 @@ void Analyzer::stat(int & i, int & j, int & sizeOpen,int & sizeClose)
    sizeOpen=open.stackSize();
    sizeClose=close.stackSize();
 }
-
+/*
 void Analyzer::analyze()
 {
    char tmp;
@@ -73,7 +68,7 @@ void Analyzer::copyText(char * buffer, int length)
          text.push(tmp);
    }
 }
-
+*/
 bool Analyzer::isAllBracketsClose()
 {
    if ((open.stackSize()==0)&&(close.stackSize()==0))
@@ -81,3 +76,4 @@ bool Analyzer::isAllBracketsClose()
    else
       return false;
 }
+

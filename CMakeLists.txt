@@ -5,5 +5,5 @@ ADD_SUBDIRECTORY(gtest)
 enable_testing()
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
-add_executable(bracket_test bracketTest.cpp task2.cpp)
+add_executable(bracket_test bracketTest.cpp task2.cpp analyzer.cpp builder.cpp round.cpp square.cpp triangular.cpp curly.cpp)
 target_link_libraries(bracket_test gtest gtest_main)
