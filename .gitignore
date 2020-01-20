@@ -37,3 +37,4 @@ test1*
 MakeFile2*
 /gtest
 /CMakeFiles
+/build/*
