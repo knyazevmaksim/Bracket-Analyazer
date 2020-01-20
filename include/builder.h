@@ -1,6 +1,6 @@
-#ifndef BUILDER_H
+﻿#ifndef BUILDER_H
 #define BUILDER_H
-#include "task2.h"
+#include "bracket.h"
 #include "analyzer.h"
 #include "round.h"
 #include "square.h"

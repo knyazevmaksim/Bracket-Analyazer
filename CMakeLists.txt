@@ -13,7 +13,7 @@ enable_testing()
 
 #find_package(stack REQUIRED)
 
-set(SOURCES src/task2.cpp src/analyzer.cpp src/builder.cpp src/round.cpp src/square.cpp src/triangular.cpp src/curly.cpp)
+set(SOURCES src/bracket.cpp src/analyzer.cpp src/builder.cpp src/round.cpp src/square.cpp src/triangular.cpp src/curly.cpp)
 
 add_executable(bracket_test ${SOURCES} tests/bracketTest.cpp)
 

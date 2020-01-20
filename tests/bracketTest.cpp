@@ -1,4 +1,4 @@
-#include "stack.h"
+﻿#include "stack.h"
 #include "gtest/gtest.h"
 #include "builder.h"
 #include "analyzer.h"
@@ -6,7 +6,7 @@
 #include "square.h"
 #include "triangular.h"
 #include "curly.h"
-#include "task2.h"
+#include "bracket.h"
 namespace
 {
    TEST(bracketTest, roundBracketCorrectScryptTrue1)
